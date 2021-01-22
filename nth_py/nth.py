@@ -22,7 +22,7 @@ def gen_lines_end(line_nums: List[int], content: TextIO=stdin) -> Iterable[str]:
 
 def gen_lines(
     line_nums: List[int],
-    content: TextIO=stdin
+    content: TextIO = stdin
 ) -> Iterable[str]:
   line_nums = sorted(line_nums)
   # line: int = None
@@ -41,7 +41,7 @@ def gen_lines(
 
 def exclude_lines(
     line_nums: List[int],
-    content: TextIO=stdin
+    content: TextIO = stdin
 ) -> Iterable[str]:
   line_nums = set(line_nums)
 
