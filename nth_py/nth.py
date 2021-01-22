@@ -16,15 +16,15 @@ READ_BYTES = 'rb'
 NEW_LINE = b'\n'
 
 
-def gen_lines_end(lines: List[int], content: TextIO=stdin) -> Iterable[str]:
+def gen_lines_end(line_nums: List[int], content: TextIO=stdin) -> Iterable[str]:
     pass
 
 
 def gen_lines(
-    lines: List[int],
+    line_nums: List[int],
     content: TextIO=stdin
 ) -> Iterable[str]:
-  line_nums = sorted(lines)
+  line_nums = sorted(line_nums)
   # line: int = None
 
   for nth, line in enumerate(content):
@@ -40,10 +40,10 @@ def gen_lines(
 
 
 def exclude_lines(
-    lines: List[int],
+    line_nums: List[int],
     content: TextIO=stdin
 ) -> Iterable[str]:
-  line_nums = set(lines)
+  line_nums = set(line_nums)
 
   for nth, line in enumerate(content):
     if nth not in line_nums:
