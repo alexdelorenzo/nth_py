@@ -1,28 +1,34 @@
 #!/usr/bin/env python3
-from typing import Optional, List, TextIO, Iterable
-from sys import argv, stdin, exit, stdout
+from __future__ import annotations
+from typing import List, TextIO, Iterable, \
+  Sequence, Final
+from sys import argv, stdin, exit
 from pathlib import Path
 import logging
 
 import click
 
 
-NAME = Path(argv[0]).name
+NAME: Final[str] = Path(argv[0]).name
 
-LOWEST = 0
-RC_NO_ARGS = 1
+LOWEST: Final[int] = 0
+RC_NO_ARGS: Final[int] = 1
 
-READ_BYTES = 'rb'
-NEW_LINE = b'\n'
+READ_BYTES: Final[str] = 'rb'
+NEW_LINE: Final[bytes] = b'\n'
+SAME_LINE: Final[str] = ''
 
 
-def gen_lines_end(line_nums: List[int], content: TextIO=stdin) -> Iterable[str]:
-    pass
+LineNums = Sequence[int]
+
+
+def gen_lines_end(line_nums: LineNums, content: TextIO = stdin) -> Iterable[str]:
+  pass
 
 
 def gen_lines(
-    line_nums: List[int],
-    content: TextIO = stdin
+  line_nums: LineNums,
+  content: TextIO = stdin
 ) -> Iterable[str]:
   line_nums = sorted(line_nums)
   # line: int = None
@@ -40,17 +46,17 @@ def gen_lines(
 
 
 def exclude_lines(
-    line_nums: List[int],
-    content: TextIO = stdin
+  line_nums: LineNums,
+  content: TextIO = stdin
 ) -> Iterable[str]:
-  line_nums = set(line_nums)
+  nums = set(line_nums)
 
   for nth, line in enumerate(content):
-    if nth not in line_nums:
+    if nth not in nums:
       yield line
 
     else:
-      line_nums.remove(nth)
+      nums.remove(nth)
 
 
 @click.command(help=f"""Return the contents of stdin from the line numbers supplied as arguments.
@@ -66,7 +72,7 @@ Example:
     help=f"Write every line, except the line numbers supplied as LINES, from stdin to stdout.")
 @click.option('-f', '--file', type=click.File('r', lazy=True), default=None,
     help=f"Read from file instead of stdin.")
-@click.option('-e', '--empty', is_flag=True, default=False
+@click.option('-e', '--empty', is_flag=True, default=False,
     help=f"Do not filter out blank lines, or lines consisting only of whitespace, from output.")
 def cmd(lines: List[str], reverse: bool, file: TextIO, empty: bool):
   if not lines and not reverse:
@@ -81,7 +87,7 @@ def cmd(lines: List[str], reverse: bool, file: TextIO, empty: bool):
 
     for line in output_lines:
       if line or empty:  # filter out empty lines
-        stdout.buffer.write(line)
+        print(line, end=SAME_LINE)
 
 
 if __name__ == "__main__":
